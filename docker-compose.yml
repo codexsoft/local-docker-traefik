@@ -1,0 +1,22 @@
+version: '3.5'
+services:
+  reverse-proxy:
+    image: 'traefik:v2.0'
+    restart: always
+    container_name: traefik_local
+    command:
+      - '--api.insecure=true'
+      - '--providers.docker=true'
+      - '--providers.docker.exposedbydefault=false'
+      - '--providers.docker.network=traefik-local-network'
+    networks:
+      - traefik-local-network
+    ports:
+      - '80:80'
+      - '8080:8080'
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+networks:
+  traefik-local-network:
+    external:
+      name: traefik-local-network
